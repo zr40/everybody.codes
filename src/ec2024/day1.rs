@@ -1,6 +1,7 @@
 use itertools::Itertools;
 
-use crate::{Quest, puzzle_result::Answer};
+use crate::Quest;
+use crate::puzzle_result::Answer;
 
 #[cfg(test)]
 const EXAMPLE_A: &str = "ABBAC";
@@ -20,7 +21,7 @@ pub(super) static DAY: Quest = Quest {
     c: solve_c,
 };
 
-fn potions(creature: char) -> u16 {
+fn potions_single(creature: char) -> u16 {
     match creature {
         'A' => 0,
         'B' => 1,
@@ -31,36 +32,30 @@ fn potions(creature: char) -> u16 {
     }
 }
 
+fn potions_double((a, b): (char, char)) -> u16 {
+    match (a, b) {
+        ('x', a) | (a, 'x') => potions_single(a),
+        (a, b) => potions_single(a) + potions_single(b) + 2,
+    }
+}
+
+fn potions_triple((a, b, c): (char, char, char)) -> u16 {
+    match (a, b, c) {
+        ('x', a, b) | (a, 'x', b) | (a, b, 'x') => potions_double((a, b)),
+        (a, b, c) => potions_single(a) + potions_single(b) + potions_single(c) + 6,
+    }
+}
+
 fn solve_a_for(input: &str) -> u16 {
-    input.chars().map(potions).sum()
+    input.chars().map(potions_single).sum()
 }
 
 fn solve_b_for(input: &str) -> u16 {
-    input
-        .chars()
-        .tuples()
-        .map(|(a, b)| {
-            if a == 'x' {
-                potions(b)
-            } else if b == 'x' {
-                potions(a)
-            } else {
-                potions(a) + potions(b) + 2
-            }
-        })
-        .sum()
+    input.chars().tuples().map(potions_double).sum()
 }
 
 fn solve_c_for(input: &str) -> u16 {
-    input
-        .chars()
-        .tuples()
-        .map(|(a, b, c)| match (a, b, c) {
-            ('x', 'x', a) | ('x', a, 'x') | (a, 'x', 'x') => potions(a),
-            ('x', a, b) | (a, 'x', b) | (a, b, 'x') => potions(a) + potions(b) + 2,
-            (a, b, c) => potions(a) + potions(b) + potions(c) + 6,
-        })
-        .sum()
+    input.chars().tuples().map(potions_triple).sum()
 }
 
 fn solve_a() -> Answer {
