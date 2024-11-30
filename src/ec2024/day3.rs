@@ -1,4 +1,4 @@
-use std::collections::VecDeque;
+use std::collections::{BTreeSet, VecDeque};
 
 use itertools::Itertools;
 
@@ -25,6 +25,24 @@ enum Mode {
     RoyalLands,
 }
 
+#[derive(Default)]
+struct VisitQueue {
+    visited: BTreeSet<(usize, usize)>,
+    queue: VecDeque<(usize, usize, usize)>,
+}
+
+impl VisitQueue {
+    fn push_back(&mut self, x: usize, y: usize, depth: usize) {
+        if self.visited.insert((x, y)) {
+            self.queue.push_back((x, y, depth));
+        }
+    }
+
+    fn pop_front(&mut self) -> Option<(usize, usize, usize)> {
+        self.queue.pop_front()
+    }
+}
+
 fn solve_for(input: &str, mode: Mode) -> usize {
     let mut map = input
         .lines()
@@ -45,39 +63,39 @@ fn solve_for(input: &str, mode: Mode) -> usize {
 
     for y in 0..map.len() {
         for x in 0..map[0].len() {
-            let mut queue = VecDeque::new();
-            queue.push_back((x, y, 0));
+            let mut queue = VisitQueue::default();
+            queue.push_back(x, y, 0);
 
             while let Some((px, py, depth)) = queue.pop_front() {
                 if map[py][px] {
                     if px > 0 {
-                        queue.push_back((px - 1, py, depth + 1));
+                        queue.push_back(px - 1, py, depth + 1);
                     }
                     if px < map[0].len() - 1 {
-                        queue.push_back((px + 1, py, depth + 1));
+                        queue.push_back(px + 1, py, depth + 1);
                     }
                     if py > 0 {
-                        queue.push_back((px, py - 1, depth + 1));
+                        queue.push_back(px, py - 1, depth + 1);
                     }
                     if py < map.len() - 1 {
-                        queue.push_back((px, py + 1, depth + 1));
+                        queue.push_back(px, py + 1, depth + 1);
                     }
 
                     if let Mode::RoyalLands = mode {
                         if px > 0 {
                             if py > 0 {
-                                queue.push_back((px - 1, py - 1, depth + 1));
+                                queue.push_back(px - 1, py - 1, depth + 1);
                             }
                             if py < map.len() - 1 {
-                                queue.push_back((px - 1, py + 1, depth + 1));
+                                queue.push_back(px - 1, py + 1, depth + 1);
                             }
                         }
                         if px < map[0].len() - 1 {
                             if py > 0 {
-                                queue.push_back((px + 1, py - 1, depth + 1));
+                                queue.push_back(px + 1, py - 1, depth + 1);
                             }
                             if py < map.len() - 1 {
-                                queue.push_back((px + 1, py + 1, depth + 1));
+                                queue.push_back(px + 1, py + 1, depth + 1);
                             }
                         }
                     }
