@@ -27,7 +27,7 @@ pub(super) static DAY: Quest = Quest {
     c: solve_c,
 };
 
-fn solve_a_for(input: &str) -> u16 {
+fn solve_a_for(input: &str) -> usize {
     let mut lines = input.lines();
     let words: Vec<&str> = lines
         .next()
@@ -40,13 +40,9 @@ fn solve_a_for(input: &str) -> u16 {
     lines.next().unwrap();
     let sentence = lines.next().unwrap();
 
-    let mut count = 0;
-    for i in 0..sentence.len() {
-        if words.iter().any(|word| sentence[i..].starts_with(word)) {
-            count += 1;
-        }
-    }
-    count
+    (0..sentence.len())
+        .filter(|i| words.iter().any(|word| sentence[*i..].starts_with(word)))
+        .count()
 }
 
 fn solve_b_for(input: &str) -> usize {
