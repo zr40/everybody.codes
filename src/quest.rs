@@ -6,6 +6,7 @@ type Part = fn() -> Answer;
 
 #[derive(Clone, Copy)]
 pub(crate) struct Quest {
+    pub name: &'static str,
     pub a: Part,
     pub b: Part,
     pub c: Part,

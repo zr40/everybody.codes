@@ -16,6 +16,7 @@ const EXAMPLE_C: &str = "xBxAAABCDxCC";
 const INPUT_C: &str = include_str!("input/1c");
 
 pub(super) static DAY: Quest = Quest {
+    name: "The Battle for the Farmlands",
     a: solve_a,
     b: solve_b,
     c: solve_c,

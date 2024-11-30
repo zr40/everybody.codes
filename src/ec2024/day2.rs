@@ -22,6 +22,7 @@ const EXAMPLE_C: &str = include_str!("input/2c_example");
 const INPUT_C: &str = include_str!("input/2c");
 
 pub(super) static DAY: Quest = Quest {
+    name: "The Runes of Power",
     a: solve_a,
     b: solve_b,
     c: solve_c,
