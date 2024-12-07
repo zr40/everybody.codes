@@ -1,6 +1,7 @@
 use std::collections::BTreeMap;
 
 use crate::Quest;
+use crate::common::concat::concat_num;
 use crate::puzzle_result::Answer;
 
 #[cfg(test)]
@@ -46,8 +47,7 @@ fn solve_a_for(input: &str) -> usize {
         columns[target_column].insert(new_pos, clapper);
     }
 
-    // XXX: would break for multi-digit numbers
-    columns[0][0] * 1000 + columns[1][0] * 100 + columns[2][0] * 10 + columns[3][0]
+    columns.iter().map(|c| c[0]).reduce(concat_num).unwrap()
 }
 
 fn solve_b_for(input: &str) -> usize {
@@ -78,12 +78,7 @@ fn solve_b_for(input: &str) -> usize {
 
         columns[target_column].insert(new_pos, clapper);
 
-        let number: usize = format!(
-            "{}{}{}{}",
-            columns[0][0], columns[1][0], columns[2][0], columns[3][0]
-        )
-        .parse()
-        .unwrap();
+        let number = columns.iter().map(|c| c[0]).reduce(concat_num).unwrap();
 
         round += 1;
 
@@ -129,12 +124,7 @@ fn solve_c_for(input: &str) -> usize {
 
         columns[target_column].insert(new_pos, clapper);
 
-        let number: usize = format!(
-            "{}{}{}{}",
-            columns[0][0], columns[1][0], columns[2][0], columns[3][0]
-        )
-        .parse()
-        .unwrap();
+        let number = columns.iter().map(|c| c[0]).reduce(concat_num).unwrap();
 
         round += 1;
 

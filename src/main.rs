@@ -7,6 +7,7 @@ use std::env::args;
 use event::EVENTS;
 use quest::Quest;
 
+mod common;
 mod ec2024;
 mod event;
 mod puzzle_result;
